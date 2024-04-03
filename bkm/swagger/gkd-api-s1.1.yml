@@ -1,0 +1,290 @@
+swagger: '2.0'
+info:
+  title: GKD API
+  version: 1.1.43
+  description: GKD API dokümantasyonu.
+  contact: {url: 'https://bkm.com.tr/'}
+schemes: [https]
+basePath: /ohvps/gkd/s1.1
+produces: [application/json]
+consumes: [application/json]
+security:
+  - auth: [hesap_bilgisi]
+  - auth: [odeme_emri]
+securityDefinitions:
+  auth:
+    type: oauth2
+    flow: application
+    tokenUrl: https://secure.api-preprod.bkm.com.tr/oauth-provider/oauth2/token
+    scopes: {odeme_emri: Odeme Emri, hesap_bilgisi: Hesap Bilgisi}
+paths:
+  /erisim-belirteci:
+    post:
+      description: Güçlü Kullanıcı Doğrulama
+      summary: erisimBelirteci
+      tags: [erisimBelirteci]
+      operationId: erisimBelirteci
+      deprecated: false
+      produces: [application/json]
+      consumes: [application/json]
+      parameters:
+        - {in: header, name: X-Request-ID, type: string, required: true, description: İsteği
+          başlatan YÖS tarafından belirlenen çağrıya özgü talep kimliği, minLength: 1,
+          maxLength: 36}
+        - {in: header, name: X-Group-ID, type: string, required: true, description: İsteği
+          başlatan YÖS tarafından belirlenen işlem akışına özgü talep kimliği, minLength: 1,
+          maxLength: 36}
+        - {in: header, name: PSU-Session-ID, type: string, required: false, description: İsteği
+          başlatan YÖS tarafından belirlenen oturuma özgü talep kimliği, minLength: 1,
+          maxLength: 100}
+        - {in: header, name: X-ASPSP-Code, type: string, required: true, description: İsteğin
+          iletildiği Hesap Hizmeti Sağlayıcısının kodudur, minLength: 4, maxLength: 4,
+          pattern: '[0-9][0-9][0-9][0-9]'}
+        - {in: header, name: X-TPP-Code, type: string, required: true, description: İsteği
+          gönderen Yetkili Ödeme Hizmeti Sağlayıcısı (YÖS) kodudur, minLength: 4,
+          maxLength: 4, pattern: '[0-9][0-9][0-9][0-9]'}
+        - {in: header, name: PSU-Auth-Date, type: string, format: date-time, required: false,
+           description: 'Müşterinin YÖS üzerinde en son oturum açtığı saat. [RFC7231]'}
+        - {in: header, name: PSU-IP-Address, type: string, required: false, description: 'ÖHK
+          YÖS üzerinde oturum açmışsa, işlemi başlattığı cihazın IP adresi.', minLength: 7,
+           maxLength: 15}
+        - {in: header, name: PSU-IP-Port, type: string, required: false, description: 'ÖHK
+          YÖS üzerinde oturum açmışsa, işlemi başlattığı cihazın Port adresi.', minLength: 1,
+           maxLength: 5}
+        - {in: header, name: PSU-GEO-Location, type: string, required: false, description: 'ÖHK’nın
+          işlemi başlattığı cihazın konum bilgisi. RFC2426 standartına uygun olarak
+          paylaşılmalıdır. Örneğin GEO:"<enlem>,< boylam > GEO:52.506931,13.144558',
+           minLength: 1, maxLength: 36}
+        - {in: header, name: PSU-User-Agent, type: string, required: false, description: 'Ödeme
+          Hizmeti Kullanıcısının işlemi başlattığı cihazın sağladığı user-agent bilgisi.
+          (Tarayıcı, versiyon, işletim sistemi bilgileri)', minLength: 1, maxLength: 255}
+        - {in: header, name: PSU-Timestamp, type: string, required: false, description: ÖHK’nın
+          işlemi başlattığı cihazın tarih saat içeren zaman bilgisi., format: date-time}
+        - {in: header, name: PSU-Device-ID, type: string, required: false, description: 'Ödeme
+          Hizmeti Kullanıcısı işlemi mobil uygulama aracılığıyla başlattıysa,kullanılan
+          mobil uygulama ilk yüklendiğinde oluşturulan tekil cihaz veya uygulama belirteci.
+          ÖHK cihazının UUID değeri kullanılabilir.', minLength: 5, maxLength: 40}
+        - {in: header, name: PSU-Device-Data, type: string, required: false, description: 'Ödeme
+          Hizmeti Kullanıcısının işlemi başlattığı mobil cihaza ait veriler. Örnek
+          alanlar Platform - (Android, iOS, Windows 10 Mobile) Device Model OS Name
+          OS Version Locale Time zone', minLength: 1, maxLength: 1024}
+        - {in: header, name: PSU-Initiated, type: string, required: true, description: İşlemler
+          servisinde yapılacak sistemsel sorgulardaki işlem limitlerini kontrol amacıyla
+          kullanılır., minLength: 1, maxLength: 1}
+        - {in: header, name: X-JWS-Signature, type: string, required: false, description: Payload
+          gövdesinin ayrılmış bir JWS imzasını içeren üstbilgi.}
+        - {in: header, name: PSU-Fraud-Check, type: string, required: false, description: Güvenlik
+          bilgilerini içeren JWS imzası.}
+        - name: body
+          in: body
+          required: true
+          description: ''
+          schema: {$ref: '#/definitions/ErisimBelirteciIstegiDTO'}
+      responses:
+        '200':
+          description: Güçlü Kullanıcı Doğrulama Yanıtı
+          schema: {$ref: '#/definitions/ErisimBelirteciDTO'}
+          headers:
+            X-Request-ID: {type: string, description: 'Çağrıya özgü talep kimliği,
+                ilgili istek başlığındaki bilgi geri dönülür.', minLength: 1, maxLength: 36}
+            X-Group-ID: {type: string, description: İsteği başlatan YÖS tarafından
+              belirlenen işlem akışına özgü talep kimliği. ilgili istek başlığındaki
+              bilgi geri dönülür., minLength: 1, maxLength: 36}
+            X-ASPSP-Code: {type: string, description: İsteğin iletildiği Hesap Hizmeti
+              Sağlayıcısının kodudur., minLength: 4, maxLength: 4, pattern: '[0-9][0-9][0-9][0-9]'}
+            X-TPP-Code: {type: string, description: İsteği gönderen Yetkili Ödeme
+              Hizmeti Sağlayıcısı (YÖS) kodudur, minLength: 4, maxLength: 4, pattern: '[0-9][0-9][0-9][0-9]'}
+            content-type: {type: string, description: Standart HTTP Başlığı; Talepte
+              sağlanan payload’ın biçimini temsil eder, default: application/json,
+              minLength: 1, maxLength: 20}
+            X-JWS-Signature: {type: string, description: x-JWS-signature}
+        '400':
+          description: Bad Request
+          schema: {$ref: '#/definitions/ProblemDTO'}
+        '401':
+          description: Unauthorized
+          schema: {$ref: '#/definitions/ProblemDTO'}
+        '403':
+          description: Forbidden
+          schema: {$ref: '#/definitions/ProblemDTO'}
+        '404':
+          description: Not Found
+          schema: {$ref: '#/definitions/ProblemDTO'}
+      security:
+        - auth: [odeme_emri]
+        - auth: [hesap_bilgisi]
+  /health:
+    get:
+      description: Health
+      summary: Health
+      tags: [gkdHealth]
+      operationId: health
+      deprecated: false
+      produces: [application/json]
+      parameters:
+        - {in: header, name: X-ASPSP-Code, type: string, required: true, description: İsteğin
+          iletildiği Hesap Hizmeti Sağlayıcısının kodudur, minLength: 4, maxLength: 4,
+          pattern: '[0-9][0-9][0-9][0-9]'}
+      responses:
+        '200':
+          description: Health Yanıtı
+          schema: {$ref: '#/definitions/GkdHealthResponse'}
+  /yetkilendirme-kodu:
+    get:
+      description: Yetkilendirme Kodu
+      summary: Yekilendirme
+      tags: [yetkilendirmeKodu]
+      operationId: yetkilendirmeKodu
+      deprecated: false
+      produces: [application/json]
+      parameters:
+        - {in: header, name: X-Request-ID, type: string, required: true, description: İsteği
+          başlatan YÖS tarafından belirlenen çağrıya özgü talep kimliği, minLength: 1,
+          maxLength: 36}
+        - {in: header, name: X-Group-ID, type: string, required: true, description: İsteği
+          başlatan YÖS tarafından belirlenen işlem akışına özgü talep kimliği, minLength: 1,
+          maxLength: 36}
+        - {in: header, name: PSU-Session-ID, type: string, required: false, description: İsteği
+          başlatan YÖS tarafından belirlenen oturuma özgü talep kimliği, minLength: 1,
+          maxLength: 100}
+        - {in: header, name: X-ASPSP-Code, type: string, required: true, description: İsteğin
+          iletildiği Hesap Hizmeti Sağlayıcısının kodudur, minLength: 4, maxLength: 4,
+          pattern: '[0-9][0-9][0-9][0-9]'}
+        - {in: header, name: X-TPP-Code, type: string, required: true, description: İsteği
+          gönderen Yetkili Ödeme Hizmeti Sağlayıcısı (YÖS) kodudur, minLength: 4,
+          maxLength: 4, pattern: '[0-9][0-9][0-9][0-9]'}
+        - {in: header, name: PSU-Auth-Date, type: string, format: date-time, required: false,
+           description: 'Müşterinin YÖS üzerinde en son oturum açtığı saat. [RFC7231]'}
+        - {in: header, name: PSU-IP-Address, type: string, required: false, description: 'ÖHK
+          YÖS üzerinde oturum açmışsa, işlemi başlattığı cihazın IP adresi.', minLength: 7,
+           maxLength: 15}
+        - {in: header, name: PSU-IP-Port, type: string, required: false, description: 'ÖHK
+          YÖS üzerinde oturum açmışsa, işlemi başlattığı cihazın Port adresi.', minLength: 1,
+           maxLength: 5}
+        - {in: header, name: PSU-GEO-Location, type: string, required: false, description: 'ÖHK’nın
+          işlemi başlattığı cihazın konum bilgisi. RFC2426 standartına uygun olarak
+          paylaşılmalıdır. Örneğin GEO:"<enlem>,< boylam > GEO:52.506931,13.144558',
+           minLength: 1, maxLength: 36}
+        - {in: header, name: PSU-User-Agent, type: string, required: false, description: 'Ödeme
+          Hizmeti Kullanıcısının işlemi başlattığı cihazın sağladığı user-agent bilgisi.
+          (Tarayıcı, versiyon, işletim sistemi bilgileri)', minLength: 1, maxLength: 255}
+        - {in: header, name: PSU-Timestamp, type: string, required: false, description: ÖHK’nın
+          işlemi başlattığı cihazın tarih saat içeren zaman bilgisi., format: date-time}
+        - {in: header, name: PSU-Device-ID, type: string, required: false, description: 'Ödeme
+          Hizmeti Kullanıcısı işlemi mobil uygulama aracılığıyla başlattıysa,kullanılan
+          mobil uygulama ilk yüklendiğinde oluşturulan tekil cihaz veya uygulama belirteci.
+          ÖHK cihazının UUID değeri kullanılabilir.', minLength: 5, maxLength: 40}
+        - {in: header, name: PSU-Device-Data, type: string, required: false, description: 'Ödeme
+          Hizmeti Kullanıcısının işlemi başlattığı mobil cihaza ait veriler. Örnek
+          alanlar Platform - (Android, iOS, Windows 10 Mobile) Device Model OS Name
+          OS Version Locale Time zone', minLength: 1, maxLength: 1024}
+        - {in: header, name: PSU-Initiated, type: string, required: true, description: İşlemler
+          servisinde yapılacak sistemsel sorgulardaki işlem limitlerini kontrol amacıyla
+          kullanılır., minLength: 1, maxLength: 1}
+        - {in: header, name: X-JWS-Signature, type: string, required: false, description: Payload
+          gövdesinin ayrılmış bir JWS imzasını içeren üstbilgi.}
+        - {in: header, name: PSU-Fraud-Check, type: string, required: false, description: Güvenlik
+          bilgilerini içeren JWS imzası.}
+        - {name: rizaNo, in: query, required: true, type: string, minLength: 1, maxLength: 128,
+           description: Rızası Numarası}
+        - {name: rizaTip, in: query, required: true, type: string, minLength: 1, maxLength: 1,
+           description: Rıza Tipi}
+      responses:
+        '200':
+          description: Health Yanıtı
+          schema: {$ref: '#/definitions/YetkilendirmeKoduDTO'}
+definitions:
+  ProblemDTO:
+    title: Problem
+    description: Problem
+    type: object
+    properties:
+      id: {description: Hatalı istek numarası., example: 2b5f0fb2-730b-11e8-adc0-fa7ae01bbebc,
+           type: string}
+      path: {description: Hata ile karşılaşılan url bilgisinin yer aldığı alandır.,
+             example: /gkd/erisim-belirteci, type: string}
+      timestamp: {description: 'yyyy-MM-dd''T''HH:mm:ssZ formatında, hatanın oluşma
+          zamanı bilgisidir.', type: string, example: '2021-08-13T09:55:23+03:00'}
+      httpCode: {description: HTTP durum kodu bilgisidir., example: 401, type: integer,
+                 minimum: 100, maximum: 600, exclusiveMaximum: true, format: int32}
+      httpMessage: {description: HTTP durum koduna ait açıklama bilgisinin yer aldığı
+                      alandır., example: Not Found, type: string}
+      moreInformation: {description: İngilizce hata mesajı bilgisidir., example: Resource
+        Schema validation error, type: string}
+      moreInformationTr: {description: Türkçe Hata mesajı bilgisidir., example: Alan
+        doğrulama hatası, type: string}
+      errorCode: {description: Hata kodu bilgisinin yer aldığı alandır., example: TR.OHVPS.Resource.InvalidFormat,
+                  type: string}
+      fieldErrors:
+        type: array
+        items: {$ref: '#/definitions/FieldErrorDTO'}
+  FieldErrorDTO:
+    title: FieldError
+    description: Field Error
+    type: object
+    properties:
+      objectName: {description: İstekte kullanılan nesne., example: erisimBelirteci,
+                   type: string}
+      field: {description: Hataya sebep olan alan, example: rizaNo, type: string}
+      messageTr: {description: Türkçe hata içeriği., example: boyut '1' ile '128'
+        arasında olmalı, type: string}
+      message: {description: İngilizce hata içeriği., example: size must be between
+                                                                 '1' and '128', type: string}
+      code: {description: Hata Kodu, example: TR.OHVPS.Field.Invalid, type: string}
+  ErisimBelirteciIstegiDTO:
+    title: ErisimBelirteciIstegi
+    description: Güçlü Kullanıcı Doğrulama Erişim Belirteci İsteği
+    type: object
+    properties:
+      rizaNo: {description: Rıza No, example: 58af49355aee43e08c1b4e5aaca7d726, type: string,
+               minLength: 1, maxLength: 128}
+      rizaTip:
+        description: |-
+          Açıklama: Rıza Tipi
+            * H - Hesap Bilgisi Rızası
+            * O - Ödeme Emri Rızası
+        example: O
+        type: string
+        enum: [H, O]
+      yetTip:
+        description: |-
+          Açıklama: Yetki Tipi
+            * yet_kod - Yetkilendirme Kodu
+            * yenileme_belirteci - Yenileme Belirteci
+        example: yet_kod
+        type: string
+        enum: [yet_kod, yenileme_belirteci]
+      yetKod: {description: 'Yetki Kodu, yetTip=yet_kod ise zorunludur.', example: abcd123,
+               type: string}
+      yenilemeBelirteci: {description: 'Yenileme Belirteci, yetTip=yenileme_belirteci
+          ise zorunludur.', example: eyJ, type: string}
+    required: [rizaNo, rizaTip, yetTip]
+  ErisimBelirteciDTO:
+    title: ErisimBelirteci
+    description: Güçlü Kullanıcı Doğrulama Erişim Belirteci Yanıtı
+    type: object
+    properties:
+      erisimBelirteci: {description: Erişim belirteci, example: eyJ, type: string}
+      gecerlilikSuresi: {description: Geçerlilik Süresi, example: 86400, type: number}
+      yenilemeBelirteci: {description: 'Yenileme Belirteci, rizaTip=H ise kullanımı
+          zorunludur.', example: eyJ, type: string}
+      yenilemeBelirteciGecerlilikSuresi: {description: Yenileme Belirteci Geçerlik
+                                            Süresi, example: 86400, type: number}
+    required: [erisimBelirteci, gecerlilikSuresi]
+  GkdHealthResponse:
+    title: Health
+    description: Health
+    type: object
+    properties:
+      status: {description: Application Health Status, example: UP, type: string,
+               minLength: 2, maxLength: 20}
+  YetkilendirmeKoduDTO:
+    title: YetkilendirmeKodu
+    description: Güçlü Kullanıcı Doğrulama Yetkilendirme Kodu Yanıtı
+    type: object
+    properties:
+      yetKod: {description: Yetkilendirme Kodu, type: string}
+      rizaDrm: {description: Rıza Durum, type: string}
+      rizaNo: {description: Riza No, type: string}
+    required: [yetKod, rizaDrm, rizaNo]
+host: gecit.api-preprod.bkm.com.tr

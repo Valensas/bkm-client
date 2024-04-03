@@ -1,0 +1,23 @@
+publishing {
+    repositories {
+        if (System.getenv("CI_API_V4_URL")) {
+            maven {
+                name = "Gitlab"
+                url = "${System.getenv('CI_API_V4_URL')}/projects/${System.getenv('CI_PROJECT_ID')}/packages/maven"
+                credentials(HttpHeaderCredentials) {
+                    name = 'Job-Token'
+                    value = System.getenv('CI_JOB_TOKEN')
+                }
+                authentication {
+                    create('header', HttpHeaderAuthentication)
+                }
+            }
+        }
+    }
+
+    publications {
+        myPublication(MavenPublication) {
+            from components.java
+        }
+    }
+}
