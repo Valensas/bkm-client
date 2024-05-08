@@ -75,6 +75,8 @@ paths:
           gövdesinin ayrılmış bir JWS imzasını içeren üstbilgi.}
         - {in: header, name: PSU-Fraud-Check, type: string, required: false, description: Güvenlik
           bilgilerini içeren JWS imzası.}
+        - {in: header, name: Authorization, type: string, required: true, description: Katılımcı 
+          ile GEÇİT arasındaki otorizasyon için kullanılan token bilgisidir.}
         - name: body
           in: body
           required: true
@@ -189,6 +191,8 @@ paths:
            description: Rızası Numarası}
         - {name: rizaTip, in: query, required: true, type: string, minLength: 1, maxLength: 1,
            description: Rıza Tipi}
+        - {in: header, name: Authorization, type: string, required: true, description: Katılımcı 
+          ile GEÇİT arasındaki otorizasyon için kullanılan token bilgisidir.}
       responses:
         '200':
           description: Health Yanıtı

@@ -37,6 +37,8 @@ paths:
           Ödeme Hizmeti Sağlayıcısı (YÖS) kodudur., minLength: 4, maxLength: 4, pattern: '[0-9][0-9][0-9][0-9]'}
         - {in: header, name: X-JWS-Signature, type: string, required: true, description: İstek
           gövdesinin sağlama toplamını içeren JWS imzası.}
+        - {in: header, name: Authorization, type: string, required: true, description: Katılımcı 
+          ile GEÇİT arasındaki otorizasyon için kullanılan token bilgisidir.}
         - in: body
           name: body
           required: true
@@ -83,6 +85,8 @@ paths:
           Hizmeti Sağlayıcısının (HHS) kodudur., minLength: 4, maxLength: 4, pattern: '[0-9][0-9][0-9][0-9]'}
         - {in: header, name: X-TPP-Code, type: string, required: true, description: Yetkili
           Ödeme Hizmeti Sağlayıcısı (YÖS) kodudur., minLength: 4, maxLength: 4, pattern: '[0-9][0-9][0-9][0-9]'}
+        - {in: header, name: Authorization, type: string, required: true, description: Katılımcı 
+          ile GEÇİT arasındaki otorizasyon için kullanılan token bilgisidir.}
       responses:
         '200':
           description: OK
@@ -127,6 +131,8 @@ paths:
           Ödeme Hizmeti Sağlayıcısı (YÖS) kodudur., minLength: 4, maxLength: 4, pattern: '[0-9][0-9][0-9][0-9]'}
         - {in: header, name: X-JWS-Signature, type: string, required: true, description: İstek
           gövdesinin sağlama toplamını içeren JWS imzası.}
+        - {in: header, name: Authorization, type: string, required: true, description: Katılımcı 
+          ile GEÇİT arasındaki otorizasyon için kullanılan token bilgisidir.}
         - {in: path, name: olayAbonelikNo, required: true, type: string, minLength: 1,
            maxLength: 64}
         - in: body
@@ -177,6 +183,8 @@ paths:
           Ödeme Hizmeti Sağlayıcısı (YÖS) kodudur., minLength: 4, maxLength: 4, pattern: '[0-9][0-9][0-9][0-9]'}
         - {in: path, name: olayAbonelikNo, required: true, type: string, minLength: 1,
            maxLength: 64}
+        - {in: header, name: Authorization, type: string, required: true, description: Katılımcı 
+          ile GEÇİT arasındaki otorizasyon için kullanılan token bilgisidir.}
       responses:
         '204':
           description: No Content
@@ -220,6 +228,8 @@ paths:
            maxLength: 64}
         - {name: syfNo, in: query, required: false, type: integer, maximum: 999, description: İstenen
           Sayfa Numarasi}
+        - {in: header, name: Authorization, type: string, required: true, description: Katılımcı 
+          ile GEÇİT arasındaki otorizasyon için kullanılan token bilgisidir.}
       responses:
         '200':
           description: OK
@@ -264,6 +274,8 @@ paths:
           Hizmeti Sağlayıcısının (HHS) kodudur., minLength: 4, maxLength: 4, pattern: '[0-9][0-9][0-9][0-9]'}
         - {in: header, name: X-TPP-Code, type: string, required: true, description: Yetkili
           Ödeme Hizmeti Sağlayıcısı (YÖS) kodudur., minLength: 4, maxLength: 4, pattern: '[0-9][0-9][0-9][0-9]'}
+        - {in: header, name: Authorization, type: string, required: true, description: Katılımcı 
+          ile GEÇİT arasındaki otorizasyon için kullanılan token bilgisidir.}
         - in: body
           name: body
           required: true

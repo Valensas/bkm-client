@@ -74,6 +74,8 @@ paths:
           OS Version Locale Time zone', minLength: 1, maxLength: 1024}
         - {in: header, name: X-JWS-Signature, type: string, required: false, description: Payload
           gövdesinin ayrılmış bir JWS imzasını içeren üstbilgi.}
+        - {in: header, name: Authorization, type: string, required: true, description: Katılımcı 
+          ile GEÇİT arasındaki otorizasyon için kullanılan token bilgisidir.}
         - name: body
           in: body
           required: true
@@ -164,6 +166,8 @@ paths:
           Hizmeti Kullanıcısının işlemi başlattığı mobil cihaza ait veriler. Örnek
           alanlar Platform -(Android, iOS, Windows 10 Mobile) Device Model OS Name
           OS Version Locale Time zone', minLength: 1, maxLength: 1024}
+        - {in: header, name: Authorization, type: string, required: true, description: Katılımcı 
+          ile GEÇİT arasındaki otorizasyon için kullanılan token bilgisidir.}
       responses:
         '200':
           description: Ödeme Emri Rıza Yanıtı
@@ -253,6 +257,8 @@ paths:
           erişim simgesi., minLength: 1, maxLength: 4096}
         - {in: header, name: X-JWS-Signature, type: string, required: false, description: Payload
           gövdesinin ayrılmış bir JWS imzasını içeren üstbilgi.}
+        - {in: header, name: Authorization, type: string, required: true, description: Katılımcı 
+          ile GEÇİT arasındaki otorizasyon için kullanılan token bilgisidir.}
         - name: body
           in: body
           required: true
@@ -343,6 +349,8 @@ paths:
         - {in: header, name: X-Access-Token, type: string, required: true, description: Ödeme
           Hizmeti Kullanıcısının GKD sürecinde doğrulanması sonrasında kullanılan
           erişim simgesi., minLength: 1, maxLength: 4096}
+        - {in: header, name: Authorization, type: string, required: true, description: Katılımcı 
+          ile GEÇİT arasındaki otorizasyon için kullanılan token bilgisidir.}
         - {name: odmEmriNo, in: path, required: true, type: string, minLength: 1, maxLength: 128,
            description: Ödeme Emri Numarası}
       responses:

@@ -74,6 +74,8 @@ paths:
           bilgilerini içeren JWS imzası.}
         - {in: header, name: X-JWS-Signature, type: string, required: false, description: Payload
           gövdesinin ayrılmış bir JWS imzasını içeren üstbilgi.}
+        - {in: header, name: Authorization, type: string, required: true, description: Katılımcı 
+          ile GEÇİT arasındaki otorizasyon için kullanılan token bilgisidir.}          
         - name: body
           in: body
           required: false
@@ -164,6 +166,8 @@ paths:
           kullanılır., minLength: 1, maxLength: 1}
         - {in: header, name: PSU-Fraud-Check, type: string, required: false, description: Güvenlik
           bilgilerini içeren JWS imzası.}
+        - {in: header, name: Authorization, type: string, required: true, description: Katılımcı 
+          ile GEÇİT arasındaki otorizasyon için kullanılan token bilgisidir.}
       responses:
         '200':
           description: Hesap Bilgisi Rıza Yanıtı
@@ -248,6 +252,8 @@ paths:
           kullanılır., minLength: 1, maxLength: 1}
         - {in: header, name: PSU-Fraud-Check, type: string, required: false, description: Güvenlik
           bilgilerini içeren JWS imzası.}
+        - {in: header, name: Authorization, type: string, required: true, description: Katılımcı 
+          ile GEÇİT arasındaki otorizasyon için kullanılan token bilgisidir.}
       responses:
         '204':
           description: No Content
@@ -336,6 +342,8 @@ paths:
            minimum: 1, description: Sayfa Başına İstenen Kayıt Sayısı}
         - {in: query, name: syfNo, required: false, type: integer, maximum: 999, minimum: 1,
            description: İstenen Sayfa Numarasi}
+        - {in: header, name: Authorization, type: string, required: true, description: Katılımcı 
+          ile GEÇİT arasındaki otorizasyon için kullanılan token bilgisidir.}
         - in: query
           name: srlmKrtr
           required: false
@@ -436,6 +444,8 @@ paths:
         - {in: header, name: X-Access-Token, type: string, required: true, description: Hesap
           Bilgisi Hizmeti kullanıcısının GKD sürecinde doğrulanması sonrasında kullanılan
           erişim belirteci., minLength: 1, maxLength: 4096}
+        - {in: header, name: Authorization, type: string, required: true, description: Katılımcı 
+          ile GEÇİT arasındaki otorizasyon için kullanılan token bilgisidir.}
         - {name: hspRef, in: path, required: true, type: string, minLength: 5, maxLength: 40,
            description: Hesap Referans Numarası}
       responses:
@@ -524,6 +534,8 @@ paths:
         - {in: header, name: X-Access-Token, type: string, required: true, description: Hesap
           Bilgisi Hizmeti kullanıcısının GKD sürecinde doğrulanması sonrasında kullanılan
           erişim belirteci., minLength: 1, maxLength: 4096}
+        - {in: header, name: Authorization, type: string, required: true, description: Katılımcı 
+          ile GEÇİT arasındaki otorizasyon için kullanılan token bilgisidir.}
         - {name: hspRef, in: path, required: true, type: string, minLength: 5, maxLength: 40,
            description: Hesap Referans Numarası}
       responses:
@@ -616,6 +628,8 @@ paths:
         - {in: header, name: X-Access-Token, type: string, required: true, description: Hesap
           Bilgisi Hizmeti kullanıcısının GKD sürecinde doğrulanması sonrasında kullanılan
           erişim belirteci., minLength: 1, maxLength: 4096}
+        - {in: header, name: Authorization, type: string, required: true, description: Katılımcı 
+          ile GEÇİT arasındaki otorizasyon için kullanılan token bilgisidir.}
         - {name: syfKytSayi, in: query, required: false, type: integer, maximum: 100,
            description: Sayfa Başına İstenen Kayıt Sayısı}
         - {name: syfNo, in: query, required: false, type: integer, maximum: 999, description: İstenen
@@ -720,6 +734,8 @@ paths:
         - {in: header, name: X-Access-Token, type: string, required: true, description: Hesap
           Bilgisi Hizmeti kullanıcısının GKD sürecinde doğrulanması sonrasında kullanılan
           erişim belirteci., minLength: 1, maxLength: 4096}
+        - {in: header, name: Authorization, type: string, required: true, description: Katılımcı 
+          ile GEÇİT arasındaki otorizasyon için kullanılan token bilgisidir.}
         - {name: hspRef, in: path, required: true, type: string, minLength: 5, maxLength: 40,
            description: Hesap Referans Numarası}
         - {name: syfKytSayi, in: query, required: false, type: integer, maximum: 999,
