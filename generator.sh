@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eu
 
-tag="${1:-1.0.0}"
+tag="$1"
 folderPath="./bkm/swagger"
 
 for file in "$folderPath"/*; do
@@ -32,7 +32,7 @@ for file in "$folderPath"/*; do
     echo "Copies from publish.gradle file are being transferred to build.gradle file."
     cat publish.gradle >> "generated/${service}/build.gradle"
     chmod +x "./generated/${service}/gradlew"
-    
+
     cd "generated/${service}"
     ./gradlew build
 

@@ -1,23 +1,56 @@
-publishing {
+buildscript {
     repositories {
-        if (System.getenv("CI_API_V4_URL")) {
-            maven {
-                name = "Gitlab"
-                url = "${System.getenv('CI_API_V4_URL')}/projects/${System.getenv('CI_PROJECT_ID')}/packages/maven"
-                credentials(HttpHeaderCredentials) {
-                    name = 'Job-Token'
-                    value = System.getenv('CI_JOB_TOKEN')
-                }
-                authentication {
-                    create('header', HttpHeaderAuthentication)
-                }
-            }
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath 'net.thebugmc.gradle:sonatype-central-portal-publisher:1.2.4'
+    }
+}
+
+apply plugin: 'net.thebugmc.gradle.sonatype-central-portal-publisher'
+
+publishing {
+    publications {
+        library(MavenPublication) {
+            from components.java
         }
     }
+    repositories {
+        mavenLocal()
+    }
+}
 
-    publications {
-        myPublication(MavenPublication) {
-            from components.java
+signing {
+    def keyId = System.getenv("SIGNING_KEYID")
+    def secretKey = System.getenv("SIGNING_SECRETKEY")
+    def passphrase = System.getenv("SIGNING_PASSPHRASE")
+
+    useInMemoryPgpKeys(keyId, secretKey, passphrase)
+}
+
+centralPortal {
+    username = System.getenv("SONATYPE_USERNAME")
+    password = System.getenv("SONATYPE_PASSWORD")
+    pom {
+        url = "https://valensas.com/"
+        scm {
+            url = "https://github.com/Valensas/bkm-api-generator"
+        }
+
+        licenses {
+            license {
+                name = "MIT License"
+                url = "https://mit-license.org"
+            }
+        }
+
+        developers {
+            developer {
+                id = "0"
+                name = "Valensas"
+                email = "info@valensas.com"
+            }
         }
     }
 }

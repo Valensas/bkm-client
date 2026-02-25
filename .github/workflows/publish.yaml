@@ -1,0 +1,28 @@
+name: Publish
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  verify:
+    uses: ./.github/workflows/verify.yaml
+  publish:
+    runs-on: ubuntu-latest
+    container:
+      image: openapitools/openapi-generator-cli:v7.4.0
+    needs: [verify]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate and Publish
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/}
+          ./generator.sh "$VERSION"
+          ./publish.sh "$VERSION"
+        env:
+          SIGNING_PASSPHRASE: ${{ secrets.SIGNING_PASSPHRASE }}
+          SIGNING_SECRETKEY: ${{ secrets.SIGNING_SECRETKEY }}
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          LIBRARY_GROUP: ${{ vars.LIBRARY_GROUP }}
+          SIGNING_KEYID: ${{ vars.SIGNING_KEYID }}

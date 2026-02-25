@@ -1,0 +1,18 @@
+name: Verify
+on:
+  pull_request:
+  workflow_call:
+  push:
+    branches: ["**"]
+    # Don't run on tags, publish will call this workflow
+    tags-ignore: ["**"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: openapitools/openapi-generator-cli:v7.4.0
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: ./generator.sh
